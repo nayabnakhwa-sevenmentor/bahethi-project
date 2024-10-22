@@ -1,0 +1,48 @@
+.intro-page {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #333;
+  }
+  
+  .animation-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  
+  .logo img {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .text {
+    color: #fff;
+    text-align: center;
+  }
+  
+  .text h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+  }
+  
+  .text p {
+    font-size: 18px;
+  }
+  
+  .animation-container.animate {
+    animation: fade-in 2s ease-in-out;
+  }
+  
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }

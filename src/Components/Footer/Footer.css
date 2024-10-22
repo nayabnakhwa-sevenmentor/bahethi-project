@@ -1,0 +1,30 @@
+#footer {
+  background-color: black;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+  z-index: 9999;
+  margin-top: 150px; /* Add a margin to the top of the footer */
+}
+
+
+  .footer .copyright {
+    background-color: #444;
+    padding: 10px;
+    text-align: center;
+    clear: both;
+  }
+  
+  .footer .copyright p {
+    margin: 0;
+  }
+
+  @media (max-width: 480px) {
+    #footer{
+      height: 60px;
+      margin-top: 10px;
+    }
+  }
