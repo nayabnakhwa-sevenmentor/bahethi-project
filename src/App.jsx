@@ -6,12 +6,13 @@ import Intro from './Components/Intro/Intro';
 import HomePage from './Components/HomePage/HomePage';
 import Kishore from './Components/Kishore/Kishore';
 import NoOne from './Components/NoOne/NoOne';
-
+import Author from "./Components/Author/Author"
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Intro />} />
+        <Route path="/author" element={<Author />} />
         <Route path="/HomePage" element={
           <Layout>
             <HomePage />
