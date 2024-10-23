@@ -1,0 +1,175 @@
+/* Card.css */
+.authorcontainer{
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    /* background-color: #f4f4f4; */
+}
+.voice-chat-card {
+    width: 300px;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px #ccc;
+    padding: 10px;
+    background-color: #e8e8e8;
+  }
+  
+  .voice-chat-card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    color: black;
+    background-color: #333;
+  }
+  
+  .username {
+    margin: 0;
+    font-size: 18px;
+    color: black;
+  }
+  
+  .status {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: green;
+    margin-left: 10px;
+  }
+  
+  .voice-chat-card-body {
+    padding: 10px;
+  }
+  
+  .status-text {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  .audio-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .audiopart {
+    width: 100%;
+  }
+  
+  /* Card.css */
+.card {
+    width: 300px;
+    height: 350px;
+    background: rgb(159, 155, 155);
+    font-family: inherit;
+    position: relative; /* Ensure the card is the reference for positioning the author */
+    border-radius: 8px;
+  }
+  
+  .quote {
+    color: rgb(225, 225, 225);
+    padding-left: 30px;
+    position: relative;
+  }
+  
+  .card-name {
+    text-transform: uppercase;
+    font-weight: 700;
+    color: rgb(0, 0, 0);
+    padding: 35px;
+    font-size:1rem;
+    line-height: 23px;
+  }
+  
+  .body-text {
+    font-size: 16px;
+    font-weight: 500;
+    padding: 60px 40px 0;
+    color: #000000;
+    position: absolute;
+    top: 40px;
+    left: 1px;
+    line-height: 23px;
+  }
+  
+  .author {
+    position: absolute; /* Position the author absolutely */
+    bottom: 10px; /* Place it 10px above the bottom of the card */
+    left: 30px; /* Align it with the content from the left */
+    font-weight: 700;
+    color: rgb(127, 155, 29);
+    padding-left: 0; /* Remove padding since we're using left positioning */
+    opacity: 0;
+    padding: 10px 20px;
+    transition: opacity 0.5s;
+  }
+  
+ 
+.card:hover .author {
+    opacity: 1; /* Show the author on hover */
+}
+  
+  .pic {
+    width: 50px;
+    height: 50px;
+    background-color: rgb(158, 196, 21);
+    border-radius: 50%;
+  }
+  
+  .author-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .author {
+    font-weight: 700;
+    color: rgb(103, 24, 24);
+    padding-left: 30px;
+  }
+  
+  .card .author svg {
+    display: inline;
+    font-size: 12px;
+    color: rgba(117, 39, 24, 0.452);
+  }
+ /* Pagination container for alignment */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* margin-top: 5px; */
+  }
+  
+  /* Style the pagination buttons */
+  .pagination-container button {
+    padding: 8px 12px;
+    margin: 0 5px;
+    background-color: #f4f4f4;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pagination-container button:hover {
+    background-color: #ccc;
+  }
+  
+  /* Active page button */
+  .pagination-container button.active {
+    background-color: #4caf50;
+    color: white;
+  }
+  .pagination-container button:disabled {
+   display: none;
+  }
