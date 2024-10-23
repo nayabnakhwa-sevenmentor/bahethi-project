@@ -256,3 +256,87 @@
   }
 
 }
+
+
+
+.scroll-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: fixed;
+  left: 10px; /* Adjust this based on your layout */
+  top: 75%; /* Adjust for vertical centering */
+  transform: translateY(-50%); /* Center the scroll-bar vertically */
+  gap: 20px; /* Add space between chapter containers */
+}
+
+.scroll-dot-container {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.mainDots {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.scroll-dot {
+  width: 20px;
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.scroll-dot.active-dot {
+  background-color: #000; /* Highlight active chapter dot */
+  transform: scale(1.2); /* Slightly enlarge active dot */
+}
+
+.sub-dots-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px; /* Space between sub-dots */
+  margin-top: 10px;
+}
+
+.sub-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #aaa;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.sub-dot.active-sub-dot {
+  background-color: #000; /* Highlight active image sub-dot */
+  transform: scale(1.2); /* Enlarge active sub-dot */
+}
+
+.scroll-dot-label {
+  margin-top: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #555;
+  background: none;
+  border: none;
+}
+
+.scroll-dot-label:hover {
+  color: #000; /* Highlight label on hover */
+}
+
+.scroll-dot-container.hidden {
+  opacity: 0;
+  pointer-events: none; /* Disable interactions for hidden chapters */
+}

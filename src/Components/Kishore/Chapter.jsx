@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { getChapterImages } from './data';
 import { ClipLoader } from 'react-spinners';
 
-const Chapter = ({ chapter, handleNext }) => {
+const Chapter = ({ chapter, currentImageIndex, setCurrentImageIndex, handleNext }) => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true); // State to track loading
   const imageRefs = useRef([]);
@@ -29,25 +29,40 @@ const Chapter = ({ chapter, handleNext }) => {
   useEffect(() => {
     if (images.length > 0) {
       const handleScroll = () => {
-        imageRefs.current.forEach((image) => {
+        let closestImageIndex = 0;
+        let minDistance = Infinity;
+  
+        imageRefs.current.forEach((image, index) => {
           if (image) {
             const distance = getDistanceFromCenter(image);
             const scale = Math.max(1 - distance / 1000, 0.8);
             const zIndex = scale > 0.9 ? 10 : 0;
             image.style.transform = `scale(${scale})`;
             image.style.zIndex = zIndex;
+  
+            if (distance < minDistance) {
+              minDistance = distance;
+              closestImageIndex = index;
+            }
           }
         });
+  
+        // Update the current image index to highlight the correct sub-dot
+        setCurrentImageIndex(closestImageIndex); // This should now come from props
       };
-
+  
       window.addEventListener('scroll', handleScroll);
-      // Initial call to set the correct scales on mount
+  
+      // Initial call to set the correct scales and active sub-dot on mount
       handleScroll();
+  
       return () => {
         window.removeEventListener('scroll', handleScroll);
       };
     }
-  }, [images]);
+  }, [images, setCurrentImageIndex]);
+  
+  
 
   // Intersection Observer to detect when the last image is centered and fully scaled
   useEffect(() => {
