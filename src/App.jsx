@@ -6,6 +6,7 @@ import Intro from './Components/Intro/Intro';
 import HomePage from './Components/HomePage/HomePage';
 import Kishore from './Components/Kishore/Kishore';
 import NoOne from './Components/NoOne/NoOne';
+import Carousel from './Components/Carousel/Carousel';
 
 const App = () => {
   return (

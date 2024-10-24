@@ -1,0 +1,53 @@
+:root {
+    --tw-ring-color: transparent !important;
+    --tw-ring-shadow: none !important; 
+    box-shadow:none !important/* Removes the color by making it transparent */
+  }
+  .carousel-container {
+    width: 300px; /* Adjust the width as needed */
+    height: 400px; /* Keep the height the same for the container */
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+    margin-left: 20px; /* Adjust this for spacing */
+  }
+  
+  .img {
+    width: 250px; /* Increase image size */
+    height: 350px; /* Increase image size */
+    margin: 10px 0; /* Maintain spacing */
+    background-size: cover; /* Ensure background image covers the element */
+    background-position: center; /* Center the background image */
+  }
+  
+  /* Container for the scroll bar and carousel */
+  .KishoreContainer {
+    display: flex; /* Use flexbox to align items side by side */
+    height: 100vh; /* Keep the full height */
+  }
+  
+
+.carousel {
+  width : 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.carousel-image {
+  width: 100%; /* Ensure full width */
+  height: 100%; /* Maintain aspect ratio */
+  margin: 10px 0; /* Add vertical margin for spacing */
+  background-size: cover; /* Ensure background image covers the element */
+  background-position: center; /* Center the background image */
+}
+
+.ring {
+    --tw-ring-color: transparent !important;
+    --tw-ring-shadow: none !important;
+    box-shadow:none !important
+}
+
+

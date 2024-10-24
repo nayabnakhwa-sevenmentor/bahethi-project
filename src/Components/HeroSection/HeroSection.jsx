@@ -9,7 +9,7 @@ function HeroSection() {
   return (
     <>
     <div className="HeroContainer">
-      <div className="container noselect">
+      <div className="SubContainer noselect">
       <Link to='/kishore'>
         <div className="canvas">
           {[...Array(25).keys()].map((index) => (
@@ -23,7 +23,7 @@ function HeroSection() {
         </div>
         </Link>
       </div>
-      <div className="container noselect">
+      <div className="SubContainer noselect">
       <Link to='/no-one'>
         <div className="canvas">
           {[...Array(25).keys()].map((index) => (

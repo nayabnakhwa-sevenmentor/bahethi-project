@@ -1,135 +1,121 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { getChapterImages } from './data';
+import React, { useEffect, useRef, useState } from 'react';
+import { getChapterImages } from './data'; // Adjust the import path
 import { ClipLoader } from 'react-spinners';
+import { gsap } from 'gsap';
 
-const Chapter = ({ chapter, handleNext }) => {
+const Chapter = ({ chapter }) => {
+  const carouselRef = useRef(null); // Ref for the carousel container
   const [images, setImages] = useState([]);
-  const [loading, setLoading] = useState(true); // State to track loading
-  const imageRefs = useRef([]);
-  const lastImageRef = useRef(null); // Ref for the last image
-  const observerRef = useRef(null); // To store the observer instance
-  const hasTriggeredNextRef = useRef(false); // To prevent multiple triggers
+  const [loading, setLoading] = useState(true);
+  let yPos = 0; // Track the Y position for dragging
 
-  // Load images when the chapter changes
   useEffect(() => {
-    hasTriggeredNextRef.current = false; // Reset trigger flag for new chapter
-    setLoading(true); // Start loading when fetching new images
+    setLoading(true);
     getChapterImages(chapter.id)
-      .then((images) => {
-        setImages(images);
-        setLoading(false); // End loading once images are fetched
+      .then((fetchedImages) => {
+        setImages(fetchedImages);
+        setLoading(false);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(`Error loading images for chapter ${chapter.id}:`, error);
-        setLoading(false); // Stop loading on error
+        setLoading(false);
       });
   }, [chapter]);
 
-  // Scroll handler to scale images
   useEffect(() => {
     if (images.length > 0) {
-      const handleScroll = () => {
-        imageRefs.current.forEach((image) => {
-          if (image) {
-            const distance = getDistanceFromCenter(image);
-            const scale = Math.max(1 - distance / 1000, 0.8);
-            const zIndex = scale > 0.9 ? 10 : 0;
-            image.style.transform = `scale(${scale})`;
-            image.style.zIndex = zIndex;
-          }
-        });
+      const ring = carouselRef.current;
+      gsap.timeline()
+        .set(ring, { rotationX: 180, cursor: 'grab' })
+        .set('.img', {
+          rotateX: (i) => -i * -36, // Adjust to your image count for correct spacing
+          transformOrigin: '50% 50% 700px',
+          z: -500,
+          backgroundImage: (i) => `url(${images[i]})`, // Use the fetched images
+          backgroundPosition: 'center',
+          backfaceVisibility: 'hidden',
+        })
+        .from('.img', {
+          duration: 1.5,
+          x: 200,
+          opacity: 0,
+          stagger: 0.1,
+          ease: 'expo',
+        })
+        .add(() => {
+          const imgElements = document.querySelectorAll('.img');
+          imgElements.forEach((img) => {
+            img.addEventListener('mouseenter', (e) => {
+              const current = e.currentTarget;
+              gsap.to(imgElements, { opacity: (i, t) => (t === current) ? 1 : 0.5, ease: 'power3' });
+            });
+            img.addEventListener('mouseleave', () => {
+              gsap.to(imgElements, { opacity: 1, ease: 'power2.inOut' });
+            });
+          });
+        }, '-=0.5');
+
+      // Dragging events
+      const dragStart = (e) => {
+        if (e.touches) e.clientY = e.touches[0].clientY;
+        yPos = Math.round(e.clientY);
+        gsap.set(ring, { cursor: 'grabbing' });
+        window.addEventListener('mousemove', drag);
+        window.addEventListener('touchmove', drag);
       };
 
-      window.addEventListener('scroll', handleScroll);
-      // Initial call to set the correct scales on mount
-      handleScroll();
+      const drag = (e) => {
+        if (e.touches) e.clientY = e.touches[0].clientY;
+        gsap.to(ring, {
+          rotationX: `+=${Math.round(e.clientY) - yPos}`, // Adjust for vertical dragging
+          onUpdate: () => {
+            const imgElements = document.querySelectorAll('.img');
+            imgElements.forEach((img) => gsap.set(img, { backgroundPosition: 'center' })); // Keep images centered
+          },
+        });
+        yPos = Math.round(e.clientY);
+      };
+
+      const dragEnd = () => {
+        window.removeEventListener('mousemove', drag);
+        window.removeEventListener('touchmove', drag);
+        gsap.set(ring, { cursor: 'grab' });
+      };
+
+      window.addEventListener('mousedown', dragStart);
+      window.addEventListener('touchstart', dragStart);
+      window.addEventListener('mouseup', dragEnd);
+      window.addEventListener('touchend', dragEnd);
+
       return () => {
-        window.removeEventListener('scroll', handleScroll);
+        window.removeEventListener('mousedown', dragStart);
+        window.removeEventListener('touchstart', dragStart);
+        window.removeEventListener('mouseup', dragEnd);
+        window.removeEventListener('touchend', dragEnd);
       };
     }
   }, [images]);
 
-  // Intersection Observer to detect when the last image is centered and fully scaled
-  useEffect(() => {
-    if (lastImageRef.current) {
-      const handleIntersection = (entries) => {
-        const entry = entries[0];
-        if (entry.isIntersecting && !hasTriggeredNextRef.current) {
-          // Check if the last image is fully scaled (scale >= 1)
-          const image = entry.target;
-          const computedStyle = window.getComputedStyle(image);
-          const matrix = computedStyle.transform;
-          let scale = 1; // Default scale
-
-          if (matrix && matrix !== 'none') {
-            const values = matrix.split('(')[1].split(')')[0].split(',');
-            if (values.length === 6) {
-              const scaleX = parseFloat(values[0]);
-              const scaleY = parseFloat(values[3]);
-              scale = (scaleX + scaleY) / 2;
-            }
-          }
-
-          if (scale >= 1) {
-            hasTriggeredNextRef.current = true; // Prevent multiple triggers
-            handleNext(); // Load the next chapter
-          }
-        }
-      };
-
-      observerRef.current = new IntersectionObserver(handleIntersection, {
-        root: null, // Observe relative to the viewport
-        rootMargin: '0px',
-        threshold: 0.5, // Trigger when 50% of the last image is visible
-      });
-
-      observerRef.current.observe(lastImageRef.current);
-
-      // Cleanup on unmount or when images change
-      return () => {
-        if (observerRef.current && lastImageRef.current) {
-          observerRef.current.unobserve(lastImageRef.current);
-        }
-      };
-    }
-  }, [handleNext, images]);
-
-  const getDistanceFromCenter = (element) => {
-    const elementRect = element.getBoundingClientRect();
-    const elementCenterY = elementRect.top + elementRect.height / 2;
-    const viewportCenterY = window.innerHeight / 2;
-    return Math.abs(viewportCenterY - elementCenterY);
-  };
-
   return (
-    <div className="ImageContainer" style={{ marginBottom: '150px' }}>
-      {images.map((image, index) => (
-        <div
-          key={index}
-          ref={(el) => (imageRefs.current[index] = el)}
-          className="ImageHolder"
-          style={{
-            transition: 'transform 0.3s ease-out, z-index 0.3s ease-out',
-            zIndex: 0,
-          }}
-        >
-          <img src={image} alt={`pic${index + 1}`} loading="lazy" />
-        </div>
-      ))}
-      {/* Assign ref to the last image and include spinner */}
-      {images.length > 0 && (
-        <div
-          ref={lastImageRef}
-          style={{
-            height: '650px', // Minimal height to prevent affecting layout
-            width: '100%',
-            backgroundColor: 'transparent', // Invisible
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          {loading && <ClipLoader color="#000" size={50} />}
+    <div className="carousel-container" style={{ perspective: '600px', height: '400px' }}>
+      {loading ? (
+        <ClipLoader color="#000" size={50} />
+      ) : (
+        <div className="ring" ref={carouselRef}>
+          {images.map((image, index) => (
+            <div
+              key={index}
+              className="img text-transparent"
+              style={{
+                position: 'absolute',
+                width: '300px',
+                height: '400px',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backfaceVisibility: 'hidden',
+              }}
+            />
+          ))}
         </div>
       )}
     </div>

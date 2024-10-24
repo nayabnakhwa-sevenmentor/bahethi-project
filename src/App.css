@@ -1,0 +1,5 @@
+:root {
+    --tw-ring-color: transparent !important;
+    --tw-ring-shadow: none !important;
+    box-shadow:none !important /* Removes the color by making it transparent */
+  }

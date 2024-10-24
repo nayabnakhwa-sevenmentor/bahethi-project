@@ -7,9 +7,9 @@
   margin-top: 20vh;
 }
 
-.container {
+.SubContainer {
   position: relative;
-  width: 250px;
+  width: 490px;
   height: 380px;
   max-width: 600px;
   transition: 200ms;
@@ -68,7 +68,7 @@
   transform: rotateX(20deg) rotateY(10deg) rotateZ(0deg);
 }
 
-.container:hover #card::before {
+.SubContainer:hover #card::before {
   transition: 200ms;
   content: '';
   opacity: 80%;
